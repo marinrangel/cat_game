@@ -6,10 +6,11 @@ const Board = (props) => {
     <div className="board">
       {props.cells.map((cell, i) => (
         <Cell
+          handleCellClick={props.handleCellClick}
+          gameOver={props.gameOver}
+          value={cell}
           key={i}
           id={i}
-          value={cell}
-          handleCelClick={props.handleCelClick}
         />
       ))}
     </div>
@@ -17,8 +18,9 @@ const Board = (props) => {
 };
 
 Board.defaultProps = {
+  handleCellClick: () => {},
+  gameOver: false,
   cells: [],
-  handleCelClick: () => {},
 };
 
 export default Board;

@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
+import Button from "./components/button";
 import Board from "./components/board";
+import Input from "./components/input";
 import "./App.css";
 
 function App() {
@@ -8,6 +10,7 @@ function App() {
   const [startGame, setStartGame] = useState(false);
   const [gameOver, setGameOver] = useState(false);
   const [playerOne, setPlayerOne] = useState("");
+  const [errorName, setErrorName] = useState("");
 
   useEffect(() => {
     validate();
@@ -36,11 +39,13 @@ function App() {
     }
   };
 
-  const handleCelClick = (item) => {
+  const handleCellClick = (item) => {
     let newCells = [...cells];
     let numberRandom = 0;
     let cellsEmpty = [];
     let assign = false;
+
+    if (gameOver) return;
 
     if (newCells[item] === "") {
       newCells[item] = "X";
@@ -81,17 +86,28 @@ function App() {
     return Math.floor(Math.random() * max);
   };
 
+  const enterName = () => {
+    if (playerOne.trim() === "") setErrorName("Username must not be empty.");
+    else {
+      setStartGame(true);
+      setErrorName("");
+    }
+  };
+
   return (
     <div className="App">
       <header className="App-header">
+        <h1>Cat's Game</h1>
         {!startGame ? (
           <>
             Name player
-            <div>
-              <input onChange={(event) => setPlayerOne(event.target.value)} />
-              <button className="btn" onClick={() => setStartGame(true)}>
-                Enter
-              </button>
+            <div className="center">
+              <Input
+                setValue={setPlayerOne}
+                enterEvent={enterName}
+                error={errorName}
+              />
+              <Button handleClick={enterName}>Enter</Button>
             </div>
           </>
         ) : (
@@ -103,11 +119,13 @@ function App() {
                   : "Computer Win!"
                 : "Player " + playerOne}
             </div>
-            <Board cells={cells} handleCelClick={handleCelClick} />
+            <Board
+              handleCellClick={handleCellClick}
+              gameOver={gameOver}
+              cells={cells}
+            />
             <div className="center">
-              <button className="btn" onClick={restartGame}>
-                Restart Game
-              </button>
+              <Button handleClick={restartGame}>Restart Game</Button>
             </div>
           </>
         )}

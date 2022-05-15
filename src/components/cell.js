@@ -3,7 +3,10 @@ import { FaTimes, FaRegCircle } from "react-icons/fa";
 
 const Cell = (props) => {
   return (
-    <div className="cell" onClick={() => props.handleCelClick(props.id)}>
+    <div
+      className={"cell " + (props.gameOver ? " none" : "")}
+      onClick={() => props.handleCellClick(props.id)}
+    >
       {props.value === "X" && <FaTimes />}
       {props.value === "O" && <FaRegCircle />}
     </div>
@@ -11,8 +14,9 @@ const Cell = (props) => {
 };
 
 Cell.defaultProps = {
+  handleCellClick: () => {},
+  gameOver: false,
   value: "",
-  handleCelClick: () => {},
 };
 
 export default Cell;
